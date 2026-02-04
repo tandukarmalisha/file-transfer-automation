@@ -3,17 +3,19 @@ import pandas as pd
 from celery import Celery
 from datetime import datetime
 from sqlalchemy import create_engine
+from dotenv import load_dotenv
 
+load_dotenv()
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # Database Configuration
-DB_USER = 'postgres'
-DB_PASSWORD = '1234'
-DB_HOST = '127.0.0.1'  
-DB_PORT = '5432'
-DB_NAME = 'etl_db'
+user=os.getenv("DB_USER")
+password=os.getenv("DB_PASSWORD")
+host=os.getenv("DB_HOST")
+port=os.getenv("DB_PORT")
+name=os.getenv("DB_NAME")
 
-DB_PATH = f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+DB_PATH = f"postgresql://{user}:{password}@{host}:{port}/{name}"
 engine = create_engine(DB_PATH)
 
 app = Celery('etl_system', broker='redis://localhost:6379/0')
